@@ -32,4 +32,18 @@ export class PostsService {
       authorId: 1,
     };
   }
+  addComment({ postId, content }) {
+    return {
+      id: 1,
+      title: 'Nest Internals',
+      votes: 1,
+      authorId: 1,
+      comments: [
+        {
+          id: 1,
+          content,
+        },
+      ],
+    };
+  }
 }

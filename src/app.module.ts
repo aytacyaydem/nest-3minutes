@@ -4,6 +4,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AuthorsModule } from './authors/authors.module';
 import { PostsModule } from './posts/posts.module';
+import { PubSubModule } from './modules/pub-sub.module';
 
 @Module({
   imports: [
@@ -14,8 +15,12 @@ import { PostsModule } from './posts/posts.module';
         path: join(process.cwd(), 'src/graphql.ts'),
         outputAs: 'class',
       },
-      installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true,
+      },
     }),
+    PubSubModule,
     AuthorsModule,
     PostsModule,
   ],

@@ -5,13 +5,17 @@ import {
   Query,
   ResolveField,
   Resolver,
+  Subscription,
 } from '@nestjs/graphql';
 import { AuthorsService } from './authors.service';
 import { PostsService } from 'src/posts/posts.service';
+import { PubSub } from 'graphql-subscriptions';
+import { Inject } from '@nestjs/common';
 
 @Resolver('Author')
 export class AuthorsResolver {
   constructor(
+    @Inject('PUB_SUB') private pubSub: PubSub,
     private authorsService: AuthorsService,
     private postsService: PostsService,
   ) {}
@@ -30,5 +34,10 @@ export class AuthorsResolver {
   @Mutation()
   async upvotePost(@Args('postId') postId: number) {
     return this.postsService.upvoteById({ id: postId });
+  }
+
+  @Subscription('commentAdded')
+  commentAdded() {
+    return this.pubSub.asyncIterator('commentAdded');
   }
 }

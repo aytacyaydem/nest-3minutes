@@ -12,10 +12,20 @@ type Post {
   authorId: Int!
 }
 
+type Comment {
+  id: String
+  content: String
+}
+
+type Subscription {
+  commentAdded: Comment
+}
+
 type Query {
   author(id: Int!): Author
 }
 
 type Mutation {
   upvotePost(postId: Int!): Post
+  addComment(postId: Int!, content: String!): Comment
 }
