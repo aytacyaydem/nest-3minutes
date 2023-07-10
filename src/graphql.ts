@@ -8,15 +8,20 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class AuthorInput {
+    firstName: string;
+    lastName: string;
+}
+
 export class Author {
-    id: number;
+    _id: string;
     firstName?: Nullable<string>;
     lastName?: Nullable<string>;
     posts?: Nullable<Nullable<Post>[]>;
 }
 
 export class Post {
-    id: number;
+    _id: string;
     title: string;
     votes?: Nullable<number>;
     authorId: number;
@@ -32,13 +37,17 @@ export abstract class ISubscription {
 }
 
 export abstract class IQuery {
-    abstract author(id: number): Nullable<Author> | Promise<Nullable<Author>>;
+    abstract author(id: string): Nullable<Author> | Promise<Nullable<Author>>;
+
+    abstract authors(): Nullable<Nullable<Author>[]> | Promise<Nullable<Nullable<Author>[]>>;
 }
 
 export abstract class IMutation {
-    abstract upvotePost(postId: number): Nullable<Post> | Promise<Nullable<Post>>;
+    abstract upvotePost(postId: string): Nullable<Post> | Promise<Nullable<Post>>;
 
-    abstract addComment(postId: number, content: string): Nullable<Comment> | Promise<Nullable<Comment>>;
+    abstract addComment(postId: string, content: string): Nullable<Comment> | Promise<Nullable<Comment>>;
+
+    abstract createAuthor(author: AuthorInput): Nullable<Author> | Promise<Nullable<Author>>;
 }
 
 type Nullable<T> = T | null;

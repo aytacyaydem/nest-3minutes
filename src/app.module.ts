@@ -5,6 +5,7 @@ import { join } from 'path';
 import { AuthorsModule } from './authors/authors.module';
 import { PostsModule } from './posts/posts.module';
 import { PubSubModule } from './modules/pub-sub.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PubSubModule } from './modules/pub-sub.module';
         'subscriptions-transport-ws': true,
       },
     }),
+    MongooseModule.forRoot('mongodb://localhost/nest'),
     PubSubModule,
     AuthorsModule,
     PostsModule,

@@ -11,6 +11,7 @@ import { AuthorsService } from './authors.service';
 import { PostsService } from 'src/posts/posts.service';
 import { PubSub } from 'graphql-subscriptions';
 import { Inject } from '@nestjs/common';
+import { AuthorInput } from 'src/graphql';
 
 @Resolver('Author')
 export class AuthorsResolver {
@@ -25,6 +26,11 @@ export class AuthorsResolver {
     return this.authorsService.findOneById(id);
   }
 
+  @Query('authors')
+  async getAuthors() {
+    return this.authorsService.findAll();
+  }
+
   @ResolveField('posts')
   async getPosts(@Parent() author) {
     const { id } = author;
@@ -34,6 +40,13 @@ export class AuthorsResolver {
   @Mutation()
   async upvotePost(@Args('postId') postId: number) {
     return this.postsService.upvoteById({ id: postId });
+  }
+
+  @Mutation('createAuthor')
+  async create(@Args('author') author: AuthorInput) {
+    const createdAuthor = await this.authorsService.create(author);
+    this.pubSub.publish('authorAdded', { authorAdded: createdAuthor });
+    return createdAuthor;
   }
 
   @Subscription('commentAdded')
